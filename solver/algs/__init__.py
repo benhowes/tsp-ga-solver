@@ -1,10 +1,12 @@
 
 from .base import RouteAlgorithm
 from .shuffle import ShuffleRouteAlg
+from .nearest import NearestRouteAlg
 
 registered_algs = [
     RouteAlgorithm,
     ShuffleRouteAlg,
+    NearestRouteAlg,
 ]
 
 class AlgorithmNotFoundException(Exception):
