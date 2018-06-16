@@ -112,5 +112,10 @@ class TestRoute():
         assert p3.id in rep 
 
 class TestLoadMap():
+    """ I've not written tests for the load map function because I have tested
+        the interfaces for point creation and route creation. If the CSV loader 
+        attempts to misuse these then errors will be raised.
 
+        The `open` call could be mocked in order to simulate loading a file if required.
+    """
     pass
