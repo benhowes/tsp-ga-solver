@@ -1,6 +1,11 @@
+import sys
 import click
+import logging
 
-from map_utils import load_map
+from solver.map_utils import load_map
+from solver.algs import get_algorithm
+
+logger = logging.getLogger(__name__)
 
 #TODO: add help docs
 @click.command()
@@ -11,13 +16,22 @@ from map_utils import load_map
 @click.argument("map_file")
 def main(alg, draw, log, time, map_file):
 
+    if log:
+        logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.WARNING)
+
     route = load_map(map_file)
 
-    # if alg: ...
-    print(route)
+    if not alg:
+        print("A valid --alg name is required")
+        sys.exit(1)
 
-    route = route.shuffle()
-    print(route)
+    router_algorithm = get_algorithm(alg)
+    logger.info("Loaded algorithm %s", alg)
+    new_route = router_algorithm().get_route(route)
+
+    print(new_route)
 
     if draw:
         pass # TODO: matplotlib stuff
