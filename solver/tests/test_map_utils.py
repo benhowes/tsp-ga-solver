@@ -53,6 +53,17 @@ class TestRoute():
         r.add(p)
         assert len(r) == 1
 
+    def test_pop_index(self):
+        p = Point("a", 1, 2)
+        p2 = Point("b", 1, 2)
+        r = Route()
+        r.add(p, p2)
+
+        assert len(r) == 2
+        r.pop(0)
+        assert len(r) == 1
+        assert r[0].id == "b"
+
     def test_distance_no_points(self):
         r = Route()
         with pytest.raises(ValueError):

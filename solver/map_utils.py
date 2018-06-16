@@ -53,6 +53,16 @@ class Route(OrderedSet):
                                 .format(type(p)))
             super().add(p)
 
+    def pop(self, index=None, last=True):
+        """Enhances the pop functionality to be able to pop from any point in the
+            ordered set, as you'd expect"""
+        if index == None:
+            return super().pop(last)
+        else:
+            ret = self[index]
+            self.remove(ret)
+            return ret
+
     @property
     def total_distance(self) -> float:
         """Gets the length of the route by summing the length of each vertex.
