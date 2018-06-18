@@ -16,18 +16,18 @@ class GeneticRouteAlg(RouteAlgorithm):
     # ---------------------
 
     # The number of iterations
-    loops = 10000
+    loops = 500
 
     # The number of chromosomes (Routes in this case) which make up the
     # population for each round
-    population_size = 20
+    population_size = 120
 
     # The probability that a child will be mutated
     mutation_prob = 0.1
 
     # The number of top ranking chromosomes which will "survive" each round
     # The top n survivors will be randomly combined to create a new population
-    iteration_survivors = 6
+    iteration_survivors = 60
 
     # ---------------------
 
