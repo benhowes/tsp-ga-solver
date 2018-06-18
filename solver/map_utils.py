@@ -169,12 +169,16 @@ def load_map(input_filename: str) -> "Route":
 
         route = Route()
         for row in reader:
-            point = Point(
-                id = row["index"],
-                x = row["x_coord"],
-                y = row["y_coord"],
-            )
-            route.add(point)
-
+            try:
+                point = Point(
+                    id = row["index"],
+                    x = row["x_coord"],
+                    y = row["y_coord"],
+                )
+                route.add(point)
+            except ValueError as e:
+                # Produce a better error
+                row = "{},{},{}".format(row["index"],row["x_coord"], row["y_coord"])
+                raise ValueError("Mapfile contained invalid row \"%s\"",row) from e
     return route
 

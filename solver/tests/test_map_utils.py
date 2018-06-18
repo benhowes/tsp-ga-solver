@@ -1,5 +1,8 @@
-import pytest
 from math import sqrt
+from unittest.mock import patch, mock_open
+from io import StringIO
+
+import pytest
 
 from solver.map_utils import Point, Route, load_map
 
@@ -31,6 +34,19 @@ class TestPoint():
         point = Point("a", 1, 2)
         with pytest.raises(TypeError):
             point.distance("Timbuktu")
+
+    @pytest.mark.parametrize("a,b,eq", (
+        (("a",0,1), ("a",0,0), False),
+        (("a",1,1), ("a",0,0), False),
+        (("b",0,1), ("a",0,1), False),
+        (("a",0,10), ("b",0,0), False),
+        (("a",0,0), ("a",0,0), True),
+        (("b",10,10), ("b",10,10), True),
+    ))
+    def test_eq(self, a, b, eq):
+        point_a = Point(*a)
+        point_b = Point(*b)
+        assert (point_a == point_b) == eq
 
 class TestRoute():
 
@@ -107,15 +123,49 @@ class TestRoute():
         r.add(p, p2, p3)
 
         rep = r.__repr__()
-        assert p.id in rep 
-        assert p2.id in rep 
-        assert p3.id in rep 
+        assert p.id in rep
+        assert p2.id in rep
+        assert p3.id in rep
 
 class TestLoadMap():
-    """ I've not written tests for the load map function because I have tested
-        the interfaces for point creation and route creation. If the CSV loader 
-        attempts to misuse these then errors will be raised.
 
-        The `open` call could be mocked in order to simulate loading a file if required.
-    """
-    pass
+    def get_f_open(self, input_file):
+        """
+            This implements the __iter__ method which the normal mock
+            does not implement.
+
+            Sourced from: https://github.com/gsauthof/utility/blob/6489c7215dac341be4e40e5348e64d69461766dd/user-installed.py#L176-L179
+        """
+        f_open = mock_open(read_data=input_file)
+        f_open.return_value.__iter__ = lambda self: iter(self.readline, "")
+        return f_open
+
+    def test_valid_map(self):
+        """
+        Asserts that the test file `input_file` decodes to what we expect
+        """
+        input_file = "index,x_coord,y_coord\n1,0,0\n2,0,1\n"
+
+        p = Point("1", 0, 0)
+        p2 = Point("2", 0, 1)
+        expected_route = Route()
+        expected_route.add(p, p2)
+
+        with patch("solver.map_utils.open", self.get_f_open(input_file),
+                        create=True) as file:
+            route = load_map("mock_file")
+
+        # Note - this does rely on hashing/eq working on points
+        assert route == expected_route
+
+    def test_invalid_map(self):
+        """
+        Asserts that the test file `input_file` decodes to what we expect
+        """
+        input_file = "index,x_coord,y_coord\n1,cheese,0\n2,0,1\n"
+
+        with patch("solver.map_utils.open", self.get_f_open(input_file),
+                        create=True) as file:
+            with pytest.raises(ValueError):
+                route = load_map("mock_file")
+
