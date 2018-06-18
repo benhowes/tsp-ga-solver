@@ -21,7 +21,7 @@ class Point:
 
     def distance(self, other: "Point") -> float:
         """Return the distance between this point and the other in Cartesian space.
-        
+
         Args:
             Other (Point) - The other point to calculate the distance to
 
@@ -35,13 +35,30 @@ class Point:
         dy = self.y - other.y
         return sqrt((dx ** 2) + (dy ** 2))
 
+    def __hash__(self):
+        """Defines a means to compare items in hashed collections.
+        I've added dots between the sections so that Point("a", 11, 0)
+        does not have the same hash as Point("a", 1, 10) etc.
+        """
+        return hash((self.id, ".", self.x, ".", self.y))
+
+    def __eq__(self, other):
+        """Points are the same if all attributes match"""
+        try:
+            return (self.id, self.x, self.y) == (other.id, other.x, other.y)
+        except AttributeError:
+            return NotImplemented
+
+    def __repr__(self):
+        return "Point(\"{}\",{},{})".format(self.id, self.x, self.y)
+
 
 class Route(OrderedSet):
     """The route class extends the OrderedSet so that methods can be added. """
 
     def add(self, *items):
         """Safety checking before adding an item
-        
+
         See OrderedSet.add
 
         Args:
@@ -81,8 +98,8 @@ class Route(OrderedSet):
         total = 0.0
         other = False
         for point in self:
-            
-            # starting condition            
+
+            # starting condition
             if not other:
                 other = point
                 continue
@@ -121,24 +138,29 @@ class Route(OrderedSet):
 
     def __repr__(self):
         """Make a string representation. creates a list of id's.
-    
+
         This method uses the fact that `self` can be used as an iterator
         since we inherit from OrderedSet to iterate over the points.
         """
+        if self.total_distance >= 2:
+            dist = self.total_distance
+        else:
+            dist = "n/a"
+
         return "Route (len {}): {}". format(
-            self.total_distance,
+            dist,
             "->".join([p.id for p in self])
         )
 
 def load_map(input_filename: str) -> "Route":
     """ Loads a map from a filename
-    
+
     Arguments:
         input_filename (str): the relative or absolute filepath to a mapfile csv
-    
+
     Returns:
         Route - An initial route
-    
+
     Raises:
         InvalidMapError: If the mapfile does not appear to be valid
     """
