@@ -22,6 +22,10 @@ pipenv shell #Only needed once per session
 python -m solver.solver <map path> --alg=<alg name>
 ```
 
+Running tests:
+```
+PYTHONPATH=. py.test -v
+```
 
 Available Algorithms
 ---
