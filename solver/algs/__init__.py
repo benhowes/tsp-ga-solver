@@ -2,11 +2,13 @@
 from .base import RouteAlgorithm
 from .shuffle import ShuffleRouteAlg
 from .nearest import NearestRouteAlg
+from .genetic import GeneticRouteAlg
 
 registered_algs = [
     RouteAlgorithm,
     ShuffleRouteAlg,
     NearestRouteAlg,
+    GeneticRouteAlg,
 ]
 
 class AlgorithmNotFoundException(Exception):
