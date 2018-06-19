@@ -16,7 +16,7 @@ class GeneticRouteAlg(RouteAlgorithm):
     # ---------------------
 
     # The number of iterations
-    loops = 500
+    loops = 5000
 
     # The number of chromosomes (Routes in this case) which make up the
     # population for each round
@@ -136,7 +136,7 @@ class GeneticRouteAlg(RouteAlgorithm):
             """
         if random.random() < self.mutation_prob:
             swap_a = random.randrange(len(route) - 1)
-            swap_b = swap_a+1#random.randrange(swap_a+1,len(route))
+            swap_b = random.randrange(swap_a+1,len(route))
             new_route = route[:swap_a] | route[swap_b:swap_b] | route[swap_a + 1:swap_b] | route[swap_b+1:]
             return new_route
         return route

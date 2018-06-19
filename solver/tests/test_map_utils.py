@@ -44,6 +44,7 @@ class TestPoint():
         (("b",10,10), ("b",10,10), True),
     ))
     def test_eq(self, a, b, eq):
+        """Asserts the __eq__ magic method works as expected"""
         point_a = Point(*a)
         point_b = Point(*b)
         assert (point_a == point_b) == eq
