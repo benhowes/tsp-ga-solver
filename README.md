@@ -2,6 +2,8 @@
 TSP solver exercise
 ====
 
+This exercise is a solution to the programming challenge which was used at Zoetrope Ltd from 2016->2018 to get candidates to demonstrate coding abilites (see `challenge_brief.md`). Now that we don't use the challenge any more, this is an example submission, with a genetic algorithm to show how a better solution may be achieved.
+
 Running
 ---
 
