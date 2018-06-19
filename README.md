@@ -39,3 +39,13 @@ all have been visited.
 
 This loops over all nodes, and for each of those calulates the distance to the
 next nearest node, giving an `O(n*log(n))` run time
+
+#### Genetic Algorithm `--alg=ga`
+The genetic algorithm implementation has been done to demonstrate how a GA works more than to
+perform well enough to be practical to use.
+
+When run, this will run 5000 generations (which takes a lot longer than 60 seconds specified in the brief)
+to run a GA with cyclic crossover and random swap mutations.
+
+Currently random starting solution genomes are used, however this can be improved by using NN or another hueristic
+for the starting genomes.

@@ -18,24 +18,24 @@ class GeneticRouteAlg(RouteAlgorithm):
     # The number of iterations
     loops = 5000
 
-    # The number of chromosomes (Routes in this case) which make up the
+    # The number of genomes (Routes in this case) which make up the
     # population for each round
     population_size = 120
 
     # The probability that a child will be mutated
     mutation_prob = 0.1
 
-    # The number of top ranking chromosomes which will "survive" each round
+    # The number of top ranking genomes which will "survive" each round
     # The top n survivors will be randomly combined to create a new population
     iteration_survivors = 60
 
     # ---------------------
 
     def ranked_population(self) -> list:
-        """Return the best N chromosomes
+        """Return the best N genomes
 
         Args:
-            n (int) - The number of chromosomes to return
+            n (int) - The number of genomes to return
 
         Returns:
             list[Route] - the best n routes
@@ -43,7 +43,7 @@ class GeneticRouteAlg(RouteAlgorithm):
         ranked = sorted(self.population, key=lambda x: x.total_distance)
         return ranked
 
-    def get_seed_chromosome(self, route):
+    def get_seed_genome(self, route):
         """Creates a random chrosome, from the starting route.
 
         This calls the shuffle algorithm
@@ -54,18 +54,18 @@ class GeneticRouteAlg(RouteAlgorithm):
         """Sets up the starting condition for the GA"""
 
         self.starting_route = route
-        self.population = [self.get_seed_chromosome(route) for _ in range(self.population_size)]
+        self.population = [self.get_seed_genome(route) for _ in range(self.population_size)]
 
     def store_best(self, iteration :int = 0):
-        self.best_chromosome = self.ranked_population().pop(0)
-        self.best_chromosome_iter = iteration
-        print("{}: Best route so far: {}".format(iteration, self.best_chromosome))
+        self.best_genome = self.ranked_population().pop(0)
+        self.best_genome_iter = iteration
+        print("{}: Best route so far: {}".format(iteration, self.best_genome))
 
     def get_random_parents(self) -> list:
         """Gets 2 random parents.
 
         Returns:
-            list[Route] - A list containing 2 random surviving chromosomes
+            list[Route] - A list containing 2 random surviving genomes
         """
         ranked = self.ranked_population()
         survivors = ranked[:self.iteration_survivors]
@@ -172,4 +172,4 @@ class GeneticRouteAlg(RouteAlgorithm):
             # store the best
             self.store_best(n)
 
-        return self.best_chromosome
+        return self.best_genome
